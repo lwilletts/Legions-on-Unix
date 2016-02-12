@@ -11,9 +11,10 @@ Install
 -------
 
 You're not going to find this in a mainstream distribution's repositories
-anytime soon, so either git clone the repository or download the tarball from the
-releases page. Feel free to use the Makefile I have provided to install the
-script to you path using:
+anytime soon, so either git clone the repository or download the tarball from
+the [releases](https://github.com/Wildefyr/Legions-on-Linux/releases/) page.
+Feel free to use the Makefile I have provided to install the script to you
+path using:
 
 ```bash
 make
