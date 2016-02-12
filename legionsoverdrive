@@ -1,0 +1,155 @@
+#!/bin/sh
+#
+# wildefyr - 2016 (c) MIT
+# Runscript for Legions: Overdrive on Linux.
+
+ARGS="$@"
+
+WINEPRE="$HOME/.wine-legions"
+DIRECTORY="$HOME/.legions"
+
+LAUNCHER="http://www.legionsoverdrive.com/launcher/Legions.exe"
+lversion="0.6.13.win32"
+
+usage() {
+    cat << EOF
+Usage: $(basename $0) [-qhV] [-p path] [-w path]
+    -p | --path:    Set path to Legions: Overdrive folder. [default: ${DIRECTORY}]
+    -w | --wine:    Set path of the wineprefix. [default: ${WINEPRE}]
+    -q | --quiet:   Turn off $(basename $0)'s output.
+    -V | --version: Print version information.
+    -h | --help:    Display this help.
+EOF
+
+    test -z $1 || exit $1
+}
+
+getVersion() {
+    printf '%s\n' "Legions-on-Linux Release 1.0 (c) wildefyr"
+    exit 0
+}
+
+validateDeps() {
+    type wine 2>&1 > /dev/null || {
+        printf '%s\n' "wine has not been found on your \$PATH." >&2
+        printf '%s\n' "Please install it using your distribution's package manager." >&2
+        exit 2
+    }
+    type winetricks 2>&1 > /dev/null || {
+        printf '%s\n' "winetricks has not been found on your \$PATH." >&2
+        printf '%s\n' "Please install it using your distribution's package manager." >&2
+        exit 2
+    }
+    type cabextract 2>&1 > /dev/null || {
+        printf '%s\n' "cabextract has not been found on your \$PATH." >&2
+        printf '%s\n' "Please install it using your distribution's package manager." >&2
+        exit 2
+    }
+    type wget 2>&1 > /dev/null || {
+        printf '%s\n' "wget has not been found on your \$PATH." >&2
+        printf '%s\n' "Please install it using your distribution's package manager." >&2
+        exit 2
+    }
+}
+
+setupEnvironment() {
+    test -d "$DIRECTORY" && {
+        printf '%s\n' "$DIRECTORY found."
+        test -d "$DIRECTORY/Legions" && {
+            printf '%s\n' "Loading Legions: Overdrive."
+            playLegions
+        } || {
+            printf '%s\n' "$DIRECTORY/Legions not found."
+            downloadLegions
+        }
+    } || {
+        printf '%s\n' "$DIRECTORY not found."
+        downloadLegions
+    }
+}
+
+playLegions() {
+    cd $DIRECTORY/Legions
+    WINEDEBUG=-all WINEARCH=win32 WINEPREFIX=$WINEPRE wine launcher.exe 2>&1 &> /dev/null
+    exit 0
+}
+
+downloadLegions() {
+    mkdir -v -p $DIRECTORY && {
+        cd $DIRECTORY
+    } || {
+        printf '%s\n' "${DIRECTORY} is not valid. Exiting."
+        exit 3
+    }
+
+    printf '%s' "Download Legions: Overdrive to ${DIRECTORY}? [y/n]: "; while read -r confirm; do
+        test -z "$confirm" && {
+            printf '%s' "Download Legions: Overdrive to ${DIRECTORY}? [y/n]: "
+            continue
+        }
+        test "$confirm" = "n" || test "$confirm" = "no" && {
+            printf '%s\n' "Exiting."
+            exit 0
+        }
+        test "$confirm" = "y" || test "$confirm" = "yes" && {
+            printf '%s\n' "Downloading launcher.exe."
+            break
+        }
+    done
+
+    wget -nc "$LAUNCHER"
+    printf '%s\n' "Extract files to Z:${DIRECTORY}."
+    WINEDEBUG=-all WINEARCH=win32 WINEPREFIX=$WINEPRE wine Legions.exe
+    rm Legions.exe
+
+    installLegions
+}
+
+installLegions() {
+    cd Legions
+
+    # copy certificates
+    cp -rf appdata/legionslauncher-${lversion}/resources ./
+
+    # get winetricks packages
+    printf '%s\n' "Downloading winetricks packages."
+
+    PACKAGES="corefonts d3dcompiler_43 d3dx9 xinput"
+    for package in $PACKAGES; do
+        WINEDEBUG=-all WINEARCH=win32 WINEPREFIX=$WINEPRE winetricks ${package}
+    done
+
+    printf '%s\n' "Lauching Legions: Overdrive."
+    WINEDEBUG=-all WINEARCH=win32 WINEPREFIX=$WINEPRE wine launcher.exe 2>&1 &> /dev/null
+
+}
+
+main() {
+    validateDeps
+    setupEnvironment
+}
+
+for arg in $ARGS; do
+    test "$PATHFLAG" = "true" && {
+        DIRECTORY=$arg
+        PATHFLAG=false
+    }
+    test "$WINEFLAG" = "true" && {
+        WINEPRE=$arg
+        WINEFLAG=false
+    }
+
+    case $arg in
+        -h|--help|h|help) usage 0        ;;
+        -V|--version)     getVersion     ;;
+        -q|--quiet)       QUIETFLAG=true ;;
+        -p|--path)        PATHFLAG=true  ;;
+        -w|--wine)        WINEFLAG=true  ;;
+    esac
+done
+
+test "$QUIETFLAG" = "true" && {
+    main 2>&1 > /dev/null
+} || {
+    main
+}
