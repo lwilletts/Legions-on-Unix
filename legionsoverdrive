@@ -9,7 +9,6 @@ WINEPRE="$HOME/.wine-legions"
 DIRECTORY="$HOME/.legions"
 
 LAUNCHER="http://www.legionsoverdrive.com/launcher/Legions.exe"
-lversion="0.6.13.win32"
 
 usage() {
     cat << EOF
@@ -107,9 +106,6 @@ downloadLegions() {
 
 installLegions() {
     cd Legions
-
-    # copy certificates
-    cp -rf appdata/legionslauncher-${lversion}/resources ./
 
     # get winetricks packages
     printf '%s\n' "Downloading winetricks packages."
