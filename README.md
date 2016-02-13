@@ -1,4 +1,4 @@
-Legions-On-Linux
+Legions-On-Unix
 ================
 
 This is a POSIX shell script to install and run [Legions:
@@ -12,7 +12,7 @@ Install
 
 You're not going to find this in a mainstream distribution's repositories
 anytime soon, so either git clone the repository or download the tarball from
-the [releases](https://github.com/Wildefyr/Legions-on-Linux/releases/) page.
+the [releases](https://github.com/Wildefyr/Legions-on-Unix/releases/) page.
 Feel free to use the Makefile I have provided to install the script to you
 path using:
 
