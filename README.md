@@ -2,10 +2,10 @@ Legions-On-Unix
 ================
 
 This is a POSIX shell script to install and run [Legions:
-Overdrive](http://www.legionsoverdrive.com/) on any unix-like distribution
-using [wine](https://www.winehq.org/) and
-[winetricks](https://wiki.winehq.org/Winetricks) if they are available for
-your platform.
+Overdrive](http://www.legionsoverdrive.com/) on any unix-like distribution using
+[wine](https://www.winehq.org/) and
+[winetricks](https://wiki.winehq.org/Winetricks) if they are available for your
+platform.
 
 Install
 -------
@@ -13,12 +13,9 @@ Install
 You're not going to find this in a mainstream distribution's repositories
 anytime soon, so either git clone the repository or download the tarball from
 the [releases](https://github.com/Wildefyr/Legions-on-Unix/releases/) page.
-Feel free to use the Makefile I have provided to install the script to you
-path using:
 
-```bash
-make
-```
+Feel free to use the Makefile I have provided to install the script to your path
+using `make`.
 
 Performance
 -----------
@@ -26,13 +23,15 @@ Performance
 This is not up to the performance level of windows by a long shot. FPS will
 fluctuate greatly from 30-150, and it will depend on the map and how fast you
 are going (more stuff to render quickly). To improve performance further make
-sure you are using your latest graphic card drivers (and/or proprietary ones
-if you don't subscribe to Stallman's idea of freedom). You can also grab the
-latest version of wine (most distributions lag behind on development
-releases), or try out [wine-staging](https://www.wine-staging.com/).
+sure you are using your latest graphic card drivers (and/or proprietary ones if
+you don't subscribe to Stallman's idea of freedom). You can also grab the latest
+version of wine (most distributions lag behind on development releases), or try
+out [wine-staging](https://www.wine-staging.com/).
 
 If your window manager or desktop environment uses a compositor I recommend
-disabling it to improve ingame responsiveness at the cost of some tearing.
+disabling it to improve ingame responsiveness at the cost of some tearing. Also
+make sure that your driver is not implementing vsync - check out files in
+`/etc/X11/xorg.conf.d`
 
 Other Issues
 ------------
