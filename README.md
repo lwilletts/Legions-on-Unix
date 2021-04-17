@@ -1,3 +1,8 @@
+Play Legions using Steam
+================
+
+It is a far better option these days to run Legions through the Proton compatibility tool. I have not encountered any issues doing so and recommend it for performance as Proton has d9vk builtin, rather than using the old WineD3D translation to openGL, meaning far greater performance. Download the legions setup.exe from the [Legions: Overdrive](http://www.legionsoverdrive.com/) and then go to Steam -> Add non-steam game and point it to setup.exe. Right-click on the entry in steam -> Properities -> Compatibility - Force the use of a specific Steam Play compatibility tool. Select the latest proton version. Enjoy playing Legions: Overdrive on Linux. This repo will remain archived just in case there are those who dislike using steam, and wish to use this script as a base to use wine on non-linux.
+
 Legions-On-Unix
 ================
 
